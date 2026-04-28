@@ -1,0 +1,6 @@
+alert_id,technique_id,technique_name,severity,expected_content
+alert_001,T1059.001,PowerShell,high,Suspicious PowerShell execution with encoded command downloading payload from external domain
+alert_002,T1021.001,Remote Desktop Protocol,medium,RDP connection to internal host from unusual source
+alert_003,T1078.002,Domain Account,high,Creation of new domain account with elevated privileges
+alert_004,T1567.002,Exfiltration Over Web Service,critical,Data exfiltration via HTTP to external domain with suspicious file download
+alert_005,T1047,Windows Management Instrumentation,high,WMI execution from unusual process for lateral movement
