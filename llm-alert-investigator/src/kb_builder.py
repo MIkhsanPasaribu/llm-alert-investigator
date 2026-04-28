@@ -6,15 +6,15 @@ from typing import Any
 
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
-from langchain_openai import OpenAIEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 
 
 class MITREKnowledgeBaseBuilder:
     """Builds and manages MITRE ATT&CK vector store for RAG."""
 
-    def __init__(self, embedding_model: str = "text-embedding-3-small"):
+    def __init__(self, embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"):
         self.embedding_model = embedding_model
-        self.embeddings = OpenAIEmbeddings(model=embedding_model)
+        self.embeddings = HuggingFaceEmbeddings(model_name=embedding_model)
         self.vector_store = None
 
     def build_from_mitre(self, mitre_data_path: str | None = None) -> FAISS:
@@ -66,7 +66,6 @@ class MITREKnowledgeBaseBuilder:
     def _load_from_mitre_library(self) -> list[Document]:
         """Load MITRE ATT&CK data using mitreattack-python library."""
         try:
-            from mitreattack import attackToExcel
             from mitreattack.attackToExcel import attackToExcel
             from mitreattack.navlayers import LayerGenerator
             from mitreattack.stix20 import MitreAttack

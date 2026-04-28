@@ -1,15 +1,14 @@
 """Streamlit UI for LLM Alert Investigator."""
 
 import json
-from pathlib import Path
 from typing import Any
 
 import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
+from pydantic import BaseModel, ConfigDict, ValidationError
 
 from src.investigator import AlertInvestigator
-from src.preprocessor import AlertPreprocessor, load_alerts_from_file
 
 load_dotenv()
 
@@ -29,7 +28,7 @@ st.sidebar.header("Configuration")
 
 model = st.sidebar.selectbox(
     "LLM Model",
-    ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"],
+    ["llama-3.3-70b-versatile"],
     index=0,
 )
 
@@ -66,11 +65,38 @@ This tool uses LangChain with RAG to:
 **Design Parameters:**
 - Temperature=0 for deterministic results
 - k=5 for MITRE technique retrieval
-- GPT-4o for analysis
+- Groq Llama-3.3-70B for analysis
 """
 )
 
 tab1, tab2, tab3 = st.tabs(["Single Alert", "Batch Processing", "Evaluation"])
+
+
+class AlertInput(BaseModel):
+    """Schema validation for alert input data."""
+
+    model_config = ConfigDict(extra="allow")
+    timestamp: str | None = None
+    src_ip: str | None = None
+    dst_ip: str | None = None
+    src_port: int | None = None
+    dst_port: int | None = None
+    event_type: str | None = None
+    process: str | None = None
+    command_line: str | None = None
+    file_hash: str | None = None
+    severity: str | None = None
+
+
+def validate_alert_payload(payload: Any) -> tuple[bool, str | None]:
+    """Validate alert payload structure and types."""
+    if not isinstance(payload, dict):
+        return False, "Alert harus berupa objek JSON."
+    try:
+        AlertInput(**payload)
+    except ValidationError as exc:
+        return False, exc.errors()[0].get("msg", "Format alert tidak valid.")
+    return True, None
 
 with tab1:
     st.header("Single Alert Investigation")
@@ -105,6 +131,10 @@ with tab1:
         if investigate_btn:
             try:
                 alert = json.loads(alert_input)
+                is_valid, error_message = validate_alert_payload(alert)
+                if not is_valid:
+                    st.error(error_message or "Alert tidak valid.")
+                    st.stop()
 
                 with st.spinner("Analyzing alert..."):
                     investigator = AlertInvestigator(
@@ -184,6 +214,10 @@ with tab2:
                 if isinstance(alerts, dict):
                     alerts = alerts.get("alerts", [alerts])
 
+                if not isinstance(alerts, list):
+                    st.error("File harus berisi daftar alert.")
+                    alerts = []
+
                 st.success(f"Loaded {len(alerts)} alerts")
 
                 st.subheader("Preview")
@@ -205,6 +239,20 @@ with tab2:
 
         if process_btn and alerts:
             with st.spinner(f"Processing {len(alerts)} alerts..."):
+                invalid_alerts = []
+                for index, alert in enumerate(alerts, 1):
+                    is_valid, error_message = validate_alert_payload(alert)
+                    if not is_valid:
+                        invalid_alerts.append(
+                            f"Alert #{index}: {error_message or 'Format tidak valid.'}"
+                        )
+
+                if invalid_alerts:
+                    st.error("Sebagian alert tidak valid:")
+                    for message in invalid_alerts:
+                        st.write(message)
+                    st.stop()
+
                 investigator = AlertInvestigator(
                     model=model,
                     temperature=temperature,
@@ -343,7 +391,7 @@ st.sidebar.markdown(
     """
 **Built with:**
 - LangChain
-- OpenAI GPT-4o
+- Groq Llama-3.3-70B
 - FAISS
 - MITRE ATT&CK
 """

@@ -4,15 +4,15 @@ import json
 from typing import Any
 
 import numpy as np
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 from sklearn.metrics import precision_score, recall_score, f1_score
 
 
 class AlertInvestigatorEvaluator:
     """Evaluates the performance of the alert investigator."""
 
-    def __init__(self, judge_llm: ChatOpenAI | None = None):
-        self.judge_llm = judge_llm or ChatOpenAI(model="gpt-4o", temperature=0.0)
+    def __init__(self, judge_llm: ChatGroq | None = None):
+        self.judge_llm = judge_llm or ChatGroq(model="llama-3.3-70b-versatile", temperature=0.0)
 
     def evaluate_mitre_mapping(
         self, predictions: list[dict[str, Any]], ground_truth: list[str]

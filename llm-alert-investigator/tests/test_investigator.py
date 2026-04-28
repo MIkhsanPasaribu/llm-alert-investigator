@@ -13,7 +13,7 @@ class TestAlertInvestigator:
         """Create an investigator instance with temporary KB path."""
         kb_path = str(tmp_path / "mitre_kb")
         return AlertInvestigator(
-            model="gpt-4o-mini",
+            model="llama-3.3-70b-versatile",
             temperature=0.0,
             retrieval_k=3,
             mitre_kb_path=kb_path,
@@ -34,7 +34,7 @@ class TestAlertInvestigator:
 
     def test_investigator_initialization(self, investigator):
         """Test investigator initialization."""
-        assert investigator.model == "gpt-4o-mini"
+        assert investigator.model == "llama-3.3-70b-versatile"
         assert investigator.temperature == 0.0
         assert investigator.retrieval_k == 3
         assert investigator.mitre_kb is not None

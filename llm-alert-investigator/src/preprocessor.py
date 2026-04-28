@@ -178,7 +178,7 @@ class AlertPreprocessor:
     def _extract_event_type(self, alert: dict[str, Any]) -> str | None:
         """Extract event type from various possible fields."""
         event_fields = [
-            "event_type", "event_type", "event_action", "action",
+            "event_type", "event_action", "action",
             "action_type", "operation", "action_name", "rule_name",
             "source_name", "provider"
         ]

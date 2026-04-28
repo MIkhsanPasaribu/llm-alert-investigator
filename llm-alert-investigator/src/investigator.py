@@ -7,7 +7,7 @@ from typing import Any
 from langchain_core.documents import Document
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 
 from src.kb_builder import MITREKnowledgeBaseBuilder
 from src.preprocessor import AlertPreprocessor
@@ -18,7 +18,7 @@ class AlertInvestigator:
 
     def __init__(
         self,
-        model: str = "gpt-4o",
+        model: str = "llama-3.3-70b-versatile",
         temperature: float = 0.0,
         retrieval_k: int = 5,
         mitre_kb_path: str = "data/mitre_attack_kb",
@@ -29,7 +29,7 @@ class AlertInvestigator:
         self.retrieval_k = retrieval_k
         self.mitre_kb_path = mitre_kb_path
 
-        self.llm = ChatOpenAI(model=model, temperature=temperature)
+        self.llm = ChatGroq(model=model, temperature=temperature)
         self.preprocessor = AlertPreprocessor()
 
         kb_builder = MITREKnowledgeBaseBuilder()
@@ -237,7 +237,7 @@ Guidelines:
 
 def investigate_alert(
     alert: dict[str, Any],
-    model: str = "gpt-4o",
+    model: str = "llama-3.3-70b-versatile",
     temperature: float = 0.0,
     retrieval_k: int = 5,
     mitre_kb_path: str = "data/mitre_attack_kb",
@@ -254,7 +254,7 @@ def investigate_alert(
 
 def investigate_alerts(
     alerts: list[dict[str, Any]],
-    model: str = "gpt-4o",
+    model: str = "llama-3.3-70b-versatile",
     temperature: float = 0.0,
     retrieval_k: int = 5,
     mitre_kb_path: str = "data/mitre_attack_kb",
