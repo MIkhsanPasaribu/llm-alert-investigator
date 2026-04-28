@@ -20,7 +20,7 @@ Security Operations Centers (SOCs) face alert fatigue from SIEM systems like Spl
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐    ┌──────────────┐    ┌───────────────┐  │
 │  │  Preprocessor│───▶│  RAG Retrieval│───▶│  LLM Analysis │  │
-│  │  (Normalize) │    │  (FAISS +     │    │  (GPT-4o +    │  │
+│  │  (Normalize) │    │  (FAISS +     │    │  (Groq Llama  │  │
 │  │              │    │   MITRE KB)   │    │   Chain)      │  │
 │  └─────────────┘    └──────────────┘    └───────────────┘  │
 │                                                   │         │
@@ -36,8 +36,8 @@ Security Operations Centers (SOCs) face alert fatigue from SIEM systems like Spl
 - **Language:** Python 3.11
 - **LLM Framework:** LangChain >= 0.2
 - **Vector Store:** FAISS (CPU)
-- **LLM Provider:** OpenAI GPT-4o
-- **Embeddings:** OpenAI text-embedding-3-small
+- **LLM Provider:** Groq Llama-3.3-70B
+- **Embeddings:** sentence-transformers/all-MiniLM-L6-v2
 - **MITRE Data:** mitreattack-python
 - **UI:** Streamlit
 - **Evaluation:** scikit-learn, pandas, matplotlib
@@ -131,7 +131,7 @@ llm-alert-investigator/
 **Design Parameters:**
 - `temperature=0` - Deterministic output
 - `k=5` - Number of MITRE techniques to retrieve
-- `model=gpt-4o` - LLM model
+- `model=llama-3.3-70b-versatile` - LLM model
 
 **Methods:**
 - `investigate(alert: dict) -> dict` - Main investigation method
