@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-alert-investigator"
+version = "0.1.0"
+description = "AI-powered SOC alert investigation with MITRE ATT&CK mapping"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "SOC Team", email = "team@example.com"}
+]
+keywords = ["security", "soc", "mitre-attack", "langchain", "rag", "llm"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Security",
+]
+
+dependencies = [
+    "openai>=1.30.0",
+    "langchain>=0.2.0",
+    "langchain-openai>=0.1.0",
+    "langchain-core>=0.2.0",
+    "langchain-community>=0.2.0",
+    "faiss-cpu>=1.8.0",
+    "mitreattack-python>=2024.05.0",
+    "streamlit>=1.35.0",
+    "scikit-learn>=1.5.0",
+    "pandas>=2.2.0",
+    "matplotlib>=3.9.0",
+    "numpy>=1.26.0",
+    "pydantic>=2.7.0",
+    "python-dotenv>=1.0.0",
+    "tabulate>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "black>=24.0.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
