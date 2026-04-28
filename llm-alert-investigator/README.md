@@ -37,8 +37,8 @@ AI-powered SOC alert investigation tool that uses RAG-augmented LLM to automatic
 - **Language**: Python 3.11
 - **LLM Framework**: LangChain >= 0.2
 - **Vector Store**: FAISS (CPU)
-- **LLM Provider**: OpenAI GPT-4o
-- **Embeddings**: OpenAI text-embedding-3-small
+- **LLM Provider**: Groq Llama-3.3-70B
+- **Embeddings**: sentence-transformers/all-MiniLM-L6-v2
 - **MITRE Data**: mitreattack-python
 - **UI**: Streamlit
 - **Evaluation**: scikit-learn, pandas, matplotlib
@@ -48,7 +48,7 @@ AI-powered SOC alert investigation tool that uses RAG-augmented LLM to automatic
 ### Prerequisites
 
 - Python 3.11 or higher
-- OpenAI API key
+- Groq API key
 
 ### Setup
 
@@ -72,7 +72,7 @@ pip install -r requirements.txt
 4. Configure environment variables:
 ```bash
 cp .env.example .env
-# Edit .env and add your OPENAI_API_KEY
+# Edit .env and add your GROQ_API_KEY
 ```
 
 5. Build the MITRE knowledge base:
@@ -196,7 +196,7 @@ Balances context window usage with relevance. This parameter can be adjusted for
 The system supports both RAG-augmented and LLM-only modes for comparative evaluation.
 
 ### LLM-as-Judge
-Uses GPT-4 to evaluate narrative quality based on accuracy, completeness, and actionability dimensions.
+Uses Groq Llama-3.3-70B to evaluate narrative quality based on accuracy, completeness, and actionability dimensions.
 
 ## Evaluation Metrics
 
@@ -264,7 +264,7 @@ If you use this tool in your research, please cite:
 
 - MITRE ATT&CK framework
 - LangChain community
-- OpenAI for GPT-4o
+- Groq for Llama-3.3-70B
 - Streamlit team
 
 ## Contact
@@ -273,4 +273,4 @@ For questions or support, please open an issue on GitHub or contact [your-email@
 
 ---
 
-**Built with**: LangChain, OpenAI GPT-4o, FAISS, MITRE ATT&CK
+**Built with**: LangChain, Groq Llama-3.3-70B, FAISS, MITRE ATT&CK
